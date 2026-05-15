@@ -17,6 +17,7 @@ public class Main {
 		garage.add(new Car("Toyota", "Corolla", 130));
 		garage.add(new Car("Mercedes", "Class A", 150));
 		garage.add(new Car("Renault", "Megane", 110));
+		garage.add(new Car("Citroën", "C4", 120));
 
 		CarService.findByMarque(garage, "Renault");
 		CarService.findByPowerLessThan(garage, 180);
