@@ -1,16 +1,31 @@
+package com.georges.todoapp;
+
+import org.springframework.data.annotation.Id;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+
 /**
  *Task.java
  *
  *
  */
 
+ @Entity
 public class Task {
+	@Id
+	@GeneratedValue
+	private Long id;
+
 	private String title;
 	private boolean completed;
 
 
 	public Task(String title) {
 		this.title = title;
+	}
+
+	public Task(){
 	}
 
 	public void markAsCompleted() {
