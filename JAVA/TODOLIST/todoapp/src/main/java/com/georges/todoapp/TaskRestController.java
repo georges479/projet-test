@@ -39,17 +39,17 @@ public class TaskRestController {
     }
 
     @PutMapping("/tasks/{id}")
-    public void renameTask(@PathVariable int id, @RequestBody Task task) {
+    public void renameTask(@PathVariable Long id, @RequestBody Task task) {
         taskService.modifyTask(id, task.getTitle());
     }
 
     @PutMapping("/tasks/{id}/completed")
-    public void completeTask(@PathVariable int id) {
+    public void completeTask(@PathVariable Long id) {
         taskService.markTaskDone(id);
     } 
 
     @DeleteMapping("/tasks/{id}")
-    public void deleteTask(@PathVariable int id) {
+    public void deleteTask(@PathVariable Long id) {
         taskService.removeTask(id);
     }
 }
