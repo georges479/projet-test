@@ -1,9 +1,9 @@
 package com.georges.todoapp;
 
-import org.springframework.data.annotation.Id;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 /**
  *
@@ -14,18 +14,18 @@ import jakarta.persistence.GeneratedValue;
 public class User {
 
 	@Id
-	@GeneratedValue 
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	private Long id;
 
 	private String username;
 	private String email;
-	private String password;
+	private char[] password;
 
 
-	public User(String username, String email, String password) {
+	public User(String username, String email, char[] password) {
 		this.username = username;
 		this.email = email;
-		this.password = password;
+		//this.password = password;
 	}
 
 	public User(){
@@ -34,6 +34,12 @@ public class User {
 	public String getUsername() {
 		return username;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+
 
 	@Override
 	public String toString() {

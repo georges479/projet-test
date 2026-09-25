@@ -1,5 +1,4 @@
 package com.georges.todoapp;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,37 +10,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaskService {
 
-	private List<Task> tasks;
+	private final TaskRepository repository;
 
-	public TaskService() {
-		this.tasks = new ArrayList<>();
+	public TaskService(TaskRepository repository) {
+		this.repository = repository;
 	}
 	
 	public void addNewTask(String title) {
-		tasks.add(new Task(title));
+		repository.save(new Task(title));
 	}
 
-	public void modifyTask(int index, String newTitle) {
-		index = index - 1;
-		if (index < 0 || index >= tasks.size()) {
-			System.out.println("Index invalide");
-		} else {
-			tasks.get(index).setTitle(newTitle);
-			System.out.println("Tâche modifiée avec succès");
-		}
+	public void modifyTask(Long id, String newTitle) {
+		Task task = repository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("Tâche intouvable avec l'ID : " + id));
+		task.setTitle(newTitle);
+		repository.save(task);
+		System.out.println("Tâche modifiée avec succès");
 	}
 
-	public void markTaskDone(int index) {
-		index = index - 1;
-		if (index < 0 || index >= tasks.size()) {
-			System.out.println("Index invalide");
-		} else {
-			tasks.get(index).markAsCompleted();
-			System.out.println("Tâche terminée : " + (index + 1));
-		}
+	public void markTaskDone(Long id) {
+		Task task = repository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("Tâche intouvable avec l'ID : " + id));
+			task.markAsCompleted();
+			repository.save(task);
+			System.out.println("Tâche terminée : " + task);
 	}
 
 	public List<Task> showTasks() {
+		List<Task> tasks = repository.findAll();
 		if (tasks.isEmpty()) {
 			System.out.println("Aucune tâche à afficher");
 		}
@@ -49,33 +45,26 @@ public class TaskService {
 	}
 
 	public List<Task> showCompletedTasks() {
-		List<Task> completedTasks = new ArrayList<>();
-		for (Task task : tasks) {
-			if (task.isCompleted()) {
-				completedTasks.add(task);
-			}
+		List<Task> tasks = repository.findByCompletedTrue();
+		if (tasks.isEmpty()){
+			System.out.println("Aucune tâche achever");
 		}
-		return completedTasks;
+		return tasks;
 	}
 
 	public List<Task> showPendingTasks() {
-		List<Task> pendingTasks = new ArrayList<>();
-		for (Task task : tasks) {
-			if (!task.isCompleted()) {
-				pendingTasks.add(task);
-			}
+		List<Task> tasks = repository.findByCompletedFalse();
+		if (tasks.isEmpty()){
+			System.out.println("Toutes les tâches sont terminées");
 		}
-		return pendingTasks;
+		return tasks;
 	}
 
-	public void removeTask(int index) {
-		index = index - 1;
-		if (index < 0 || index >= tasks.size()) {
-			System.out.println("Index invalide");
-		} else {
-			tasks.remove(index);
-			System.out.println("Tâche supprimer : " + (index + 1));
-		}
+	public void removeTask(Long id) {
+		Task task = repository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("Tâche intouvable avec l'ID : " + id));
+		repository.delete(task);
+		System.out.println("Tâche supprimer : " + task);
 	}
 }
 
