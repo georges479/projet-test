@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.georges.todoapp.dto.TaskCreateDto;
+import com.georges.todoapp.dto.TaskDto;
+
 @RestController
 public class TaskRestController {
 
@@ -21,12 +24,12 @@ public class TaskRestController {
     }
 
     @PostMapping("/tasks")
-    public void addTask(@RequestBody Task task) {
-        taskService.addNewTask(task.getTitle());
+    public void addTask(@RequestBody TaskCreateDto taskCreateDto) {
+        taskService.addNewTask(taskCreateDto);
     }
 
     @GetMapping("/tasks")
-    public List<Task> getTask(@RequestParam(required = false) String status) {
+    public List<TaskDto> getTask(@RequestParam(required = false) String status) {
         if ("completed".equals(status)) {
             return taskService.showCompletedTasks();
         }
